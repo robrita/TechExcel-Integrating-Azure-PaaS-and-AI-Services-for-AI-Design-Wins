@@ -67,30 +67,30 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", async () => 
+app.MapGet("/", async () =>
 {
     return "Welcome to the Contoso Suites Web API!";
 })
     .WithName("Index")
     .WithOpenApi();
 
-app.MapGet("/Hotels", async () => 
+app.MapGet("/Hotels", async () =>
 {
     var hotels = await app.Services.GetRequiredService<IDatabaseService>().GetHotels();
     return hotels;
 })
     .WithName("GetHotels")
     .WithOpenApi();
-  
-app.MapGet("/Hotels/{hotelId}/Bookings/", async (int hotelId) => 
+
+app.MapGet("/Hotels/{hotelId}/Bookings/", async (int hotelId) =>
 {
     var bookings = await app.Services.GetRequiredService<IDatabaseService>().GetBookingsForHotel(hotelId);
     return bookings;
 })
     .WithName("GetBookingsForHotel")
     .WithOpenApi();
-  
-app.MapGet("/Hotels/{hotelId}/Bookings/{min_date}", async (int hotelId, DateTime min_date) => 
+
+app.MapGet("/Hotels/{hotelId}/Bookings/{min_date}", async (int hotelId, DateTime min_date) =>
 {
     var bookings = await app.Services.GetRequiredService<IDatabaseService>().GetBookingsByHotelAndMinimumDate(hotelId, min_date);
     return bookings;
@@ -124,12 +124,13 @@ app.MapGet("/Vectorize", async (string text, [FromServices] IVectorizationServic
 app.MapPost("/VectorSearch", async ([FromBody] float[] queryVector, [FromServices] IVectorizationService vectorizationService, int max_results = 0, double minimum_similarity_score = 0.8) =>
 {
     // Exercise 3 Task 3 TODO #3: Insert code to call the ExecuteVectorSearch function on the Vectorization Service. Don't forget to remove the NotImplementedException.
-    throw new NotImplementedException();
+    var results = await vectorizationService.ExecuteVectorSearch(queryVector, max_results, minimum_similarity_score);
+    return results;
 })
     .WithName("VectorSearch")
     .WithOpenApi();
 
-app.MapPost("/MaintenanceCopilotChat", async ([FromBody]string message, [FromServices] MaintenanceCopilot copilot) =>
+app.MapPost("/MaintenanceCopilotChat", async ([FromBody] string message, [FromServices] MaintenanceCopilot copilot) =>
 {
     // Exercise 5 Task 2 TODO #10: Insert code to call the Chat function on the MaintenanceCopilot. Don't forget to remove the NotImplementedException.
     throw new NotImplementedException();
